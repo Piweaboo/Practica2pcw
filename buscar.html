@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Tu página favorita para NO vender melones</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="media/fontello/css/fontello.css">
+    <script type="text/javascript" src="script.js"></script>
+  </head>
+  <body>
+    <!--Aqui va la imágen y titulo de la página, común a todos-->
+    <header>
+      <a href="index.html"><img src="media/melones_vender.png" alt="nombre de la web"  height="150" width="150" ></a>
+      <div>
+        <a href="index.html"><h1>Vendemelón</h1></a>
+        <p>Por última vez, no vendemos melones</p>
+      </div>
+    </header>
+    <!--Ahora la barra de navegación-->
+    <nav>
+      <!--De momento los pongo como enlaces a pelo, luego les metemos iconos o algo-->
+      <label for="ckbmenu"><span class="icon-th-list"></span></label>
+      <input type="checkbox" id="ckbmenu">
+      <!--ul=unordered list. Lo que va aqui dentro aparecerá como una lista-->
+      <ul id="navegacion">
+      </ul>
+    </nav>
+    <!--Comprobar que hay usuario logueado-->
+    <script>MenuLogin();</script>
+
+    <h2>Buscar</h2>
+    <form>
+      <label for="Nartic">Nombre del artículo</label><br>
+      <input type="text"  id="Nartic" autofocus><br>
+
+      <br>
+
+      <label for="Vendor">Vendedor</label><br>
+      <input type="text"  id="Vendor"><br>
+
+      <br>
+
+      <label for="Categor">Categoría</label><br>
+      <input type="text"  id="Categor"><br>
+
+      <br>
+
+      <label for="Author">Autor</label><br>
+      <input type="text"  id="Author"><br>
+
+      <br>
+
+      <label for="precio">Precio</label><br>
+      <input type="range" id="precio" value="250" min="0" max="500"><br>
+
+      <label> Ordenar por:</label><br>
+      <input type="radio" name="orden" value="asc" checked>Articulos que sigue el usuario
+      <input type="radio" name="orden" value="desc">Articulos que el usuario vende <br>
+
+      <input type="submit" name="Buscar">
+
+    </form>
+
+    <br>
+
+    <h3>Resultados de búsqueda</h3>
+    <section class="Tabla">
+      <br>
+      <h2>Últimos artículos</h2>
+      <div>
+      <!--Fila 1-->
+        <!--F1,Articulo 1-->
+      <article class="columna">
+        <a href="articulo.html" lang="en"><h3>Monsta X Official Light Stick Ver. 2</h3></a>
+        <a href="articulo.html"><img src="media/monstaXStick.webp" alt="imagen_articulo"></a>
+        <br>Precio: 60€ <span class="icon-picture">7</span> <span class="icon-eye"> 27  </span><span class="icon-heart"> 20</span>
+        <p>Vendo el Light Stick de Monsta X, comprado y usado solo una vez en el concierto de 2019 en Madrid. o lo cambio por la army bomb ver.3 etiquetas: kpop, k-pop, lightstick
+        "Why I love them so much?" I always asked myself about this. Whenever I watch them, support them, my love for them increases to the peak that my heart can't handle it. They are luring me in to them.
+        I asked again, "Why I love them so much?" And now my heart know why.
+        Because of the love that they showers us, armys, the never ending laughter they got us, the meaningful lyrics they send to us in their songs, the time they spend with us even with busy schedule. And most of all, the friendship they have with each other. The strongly bond of them left me in awe. :cry:
+    My friend asked me, "What if bts ends up like bb? They end being legends, they wont perform much, they wont release songs that much anymore, they'll start not to post anything."
+        I don't want that to happen :sob: without them my life is so empty. I think I'm gonna miss them once they start to get too famous.
+        Okay, stop cutting the onions now! Let's just appreciate the dork bts now, shall we? :grinning:</p>
+      </article>
+      <!--F1,Articulo 2-->
+      <article class="columna">
+        <a href="articulo.html" lang="en"><h3>Monsta X Official Light Stick Ver. 2</h3></a>
+        <a href="articulo.html"><img src="media/monstaXStick.webp" alt="imagen_articulo"></a>
+        <br>Precio: 60€ <span class="icon-picture">7</span> <span class="icon-eye"> 27  </span><span class="icon-heart"> 20</span>
+        <p>Vendo el Light Stick de Monsta X, comprado y usado solo una vez en el concierto de 2019 en Madrid. o lo cambio por la army bomb ver.3 etiquetas: kpop, k-pop, lightstick
+        "Why I love them so much?" I always asked myself about this. Whenever I watch them, support them, my love for them increases to the peak that my heart can't handle it. They are luring me in to them.
+        I asked again, "Why I love them so much?" And now my heart know why.
+        Because of the love that they showers us, armys, the never ending laughter they got us, the meaningful lyrics they send to us in their songs, the time they spend with us even with busy schedule. And most of all, the friendship they have with each other. The strongly bond of them left me in awe. :cry:
+    My friend asked me, "What if bts ends up like bb? They end being legends, they wont perform much, they wont release songs that much anymore, they'll start not to post anything."
+        I don't want that to happen :sob: without them my life is so empty. I think I'm gonna miss them once they start to get too famous.
+        Okay, stop cutting the onions now! Let's just appreciate the dork bts now, shall we? :grinning:</p>
+      </article>
+      <!--F1,Articulo 3-->
+      <article class="columna">
+        <a href="articulo.html" lang="en"><h3>Monsta X Official Light Stick Ver. 2</h3></a>
+        <a href="articulo.html"><img src="media/monstaXStick.webp" alt="imagen_articulo"></a>
+        <br>Precio: 60€ <span class="icon-picture">7</span> <span class="icon-eye"> 27  </span><span class="icon-heart"> 20</span>
+        <p>Vendo el Light Stick de Monsta X, comprado y usado solo una vez en el concierto de 2019 en Madrid. o lo cambio por la army bomb ver.3 etiquetas: kpop, k-pop, lightstick
+        "Why I love them so much?" I always asked myself about this. Whenever I watch them, support them, my love for them increases to the peak that my heart can't handle it. They are luring me in to them.
+        I asked again, "Why I love them so much?" And now my heart know why.
+        Because of the love that they showers us, armys, the never ending laughter they got us, the meaningful lyrics they send to us in their songs, the time they spend with us even with busy schedule. And most of all, the friendship they have with each other. The strongly bond of them left me in awe. :cry:
+    My friend asked me, "What if bts ends up like bb? They end being legends, they wont perform much, they wont release songs that much anymore, they'll start not to post anything."
+        I don't want that to happen :sob: without them my life is so empty. I think I'm gonna miss them once they start to get too famous.
+        Okay, stop cutting the onions now! Let's just appreciate the dork bts now, shall we? :grinning:</p>
+      </article>
+      <!--F2,Articulo 1-->
+      <article class="columna">
+        <a href="articulo.html" lang="en"><h3>Monsta X Official Light Stick Ver. 2</h3></a>
+        <a href="articulo.html"><img src="media/monstaXStick.webp" alt="imagen_articulo"></a>
+        <br>Precio: 60€ <span class="icon-picture">7</span> <span class="icon-eye"> 27  </span><span class="icon-heart"> 20</span>
+        <p>Vendo el Light Stick de Monsta X, comprado y usado solo una vez en el concierto de 2019 en Madrid. o lo cambio por la army bomb ver.3 etiquetas: kpop, k-pop, lightstick
+        "Why I love them so much?" I always asked myself about this. Whenever I watch them, support them, my love for them increases to the peak that my heart can't handle it. They are luring me in to them.
+        I asked again, "Why I love them so much?" And now my heart know why.
+        Because of the love that they showers us, armys, the never ending laughter they got us, the meaningful lyrics they send to us in their songs, the time they spend with us even with busy schedule. And most of all, the friendship they have with each other. The strongly bond of them left me in awe. :cry:
+    My friend asked me, "What if bts ends up like bb? They end being legends, they wont perform much, they wont release songs that much anymore, they'll start not to post anything."
+        I don't want that to happen :sob: without them my life is so empty. I think I'm gonna miss them once they start to get too famous.
+        Okay, stop cutting the onions now! Let's just appreciate the dork bts now, shall we? :grinning:</p>
+      </article>
+      <!--F2,Articulo 2-->
+      <article class="columna">
+        <a href="articulo.html" lang="en"><h3>Monsta X Official Light Stick Ver. 2</h3></a>
+        <a href="articulo.html"><img src="media/monstaXStick.webp" alt="imagen_articulo"></a>
+        <br>Precio: 60€ <span class="icon-picture">7</span> <span class="icon-eye"> 27  </span><span class="icon-heart"> 20</span>
+        <p>Vendo el Light Stick de Monsta X, comprado y usado solo una vez en el concierto de 2019 en Madrid. o lo cambio por la army bomb ver.3 etiquetas: kpop, k-pop, lightstick
+        "Why I love them so much?" I always asked myself about this. Whenever I watch them, support them, my love for them increases to the peak that my heart can't handle it. They are luring me in to them.
+        I asked again, "Why I love them so much?" And now my heart know why.
+        Because of the love that they showers us, armys, the never ending laughter they got us, the meaningful lyrics they send to us in their songs, the time they spend with us even with busy schedule. And most of all, the friendship they have with each other. The strongly bond of them left me in awe. :cry:
+    My friend asked me, "What if bts ends up like bb? They end being legends, they wont perform much, they wont release songs that much anymore, they'll start not to post anything."
+        I don't want that to happen :sob: without them my life is so empty. I think I'm gonna miss them once they start to get too famous.
+        Okay, stop cutting the onions now! Let's just appreciate the dork bts now, shall we? :grinning:</p>
+      </article>
+      <!--F2,Articulo 3-->
+      <article class="columna">
+        <a href="articulo.html" lang="en"><h3>Monsta X Official Light Stick Ver. 2</h3></a>
+        <a href="articulo.html"><img src="media/monstaXStick.webp" alt="imagen_articulo"></a>
+        <br>Precio: 60€ <span class="icon-picture">7</span> <span class="icon-eye"> 27  </span><span class="icon-heart"> 20</span>
+        <p>Vendo el Light Stick de Monsta X, comprado y usado solo una vez en el concierto de 2019 en Madrid. o lo cambio por la army bomb ver.3 etiquetas: kpop, k-pop, lightstick
+        "Why I love them so much?" I always asked myself about this. Whenever I watch them, support them, my love for them increases to the peak that my heart can't handle it. They are luring me in to them.
+        I asked again, "Why I love them so much?" And now my heart know why.
+        Because of the love that they showers us, armys, the never ending laughter they got us, the meaningful lyrics they send to us in their songs, the time they spend with us even with busy schedule. And most of all, the friendship they have with each other. The strongly bond of them left me in awe. :cry:
+    My friend asked me, "What if bts ends up like bb? They end being legends, they wont perform much, they wont release songs that much anymore, they'll start not to post anything."
+        I don't want that to happen :sob: without them my life is so empty. I think I'm gonna miss them once they start to get too famous.
+        Okay, stop cutting the onions now! Let's just appreciate the dork bts now, shall we? :grinning:</p>
+      </article>
+      <!--F3,Articulo 1-->
+      <article class="columna">
+        <a href="articulo.html" lang="en"><h3>Monsta X Official Light Stick Ver. 2</h3></a>
+        <a href="articulo.html"><img src="media/monstaXStick.webp" alt="imagen_articulo"></a>
+        <br>Precio: 60€ <span class="icon-picture">7</span> <span class="icon-eye"> 27  </span><span class="icon-heart"> 20</span>
+        <p>Vendo el Light Stick de Monsta X, comprado y usado solo una vez en el concierto de 2019 en Madrid. o lo cambio por la army bomb ver.3 etiquetas: kpop, k-pop, lightstick
+        "Why I love them so much?" I always asked myself about this. Whenever I watch them, support them, my love for them increases to the peak that my heart can't handle it. They are luring me in to them.
+        I asked again, "Why I love them so much?" And now my heart know why.
+        Because of the love that they showers us, armys, the never ending laughter they got us, the meaningful lyrics they send to us in their songs, the time they spend with us even with busy schedule. And most of all, the friendship they have with each other. The strongly bond of them left me in awe. :cry:
+    My friend asked me, "What if bts ends up like bb? They end being legends, they wont perform much, they wont release songs that much anymore, they'll start not to post anything."
+        I don't want that to happen :sob: without them my life is so empty. I think I'm gonna miss them once they start to get too famous.
+        Okay, stop cutting the onions now! Let's just appreciate the dork bts now, shall we? :grinning:</p>
+      </article>
+      <!--F3,Articulo 2-->
+      <article class="columna">
+        <a href="articulo.html" lang="en"><h3>Monsta X Official Light Stick Ver. 2</h3></a>
+        <a href="articulo.html"><img src="media/monstaXStick.webp" alt="imagen_articulo"></a>
+        <br>Precio: 60€ <span class="icon-picture">7</span> <span class="icon-eye"> 27  </span><span class="icon-heart"> 20</span>
+        <p>Vendo el Light Stick de Monsta X, comprado y usado solo una vez en el concierto de 2019 en Madrid. o lo cambio por la army bomb ver.3 etiquetas: kpop, k-pop, lightstick
+        "Why I love them so much?" I always asked myself about this. Whenever I watch them, support them, my love for them increases to the peak that my heart can't handle it. They are luring me in to them.
+        I asked again, "Why I love them so much?" And now my heart know why.
+        Because of the love that they showers us, armys, the never ending laughter they got us, the meaningful lyrics they send to us in their songs, the time they spend with us even with busy schedule. And most of all, the friendship they have with each other. The strongly bond of them left me in awe. :cry:
+    My friend asked me, "What if bts ends up like bb? They end being legends, they wont perform much, they wont release songs that much anymore, they'll start not to post anything."
+        I don't want that to happen :sob: without them my life is so empty. I think I'm gonna miss them once they start to get too famous.
+        Okay, stop cutting the onions now! Let's just appreciate the dork bts now, shall we? :grinning:</p>
+      </article>
+      <!--F3,Articulo 3-->
+      <article class="columna">
+        <a href="articulo.html" lang="en"><h3>Monsta X Official Light Stick Ver. 2</h3></a>
+        <a href="articulo.html"><img src="media/monstaXStick.webp" alt="imagen_articulo"></a>
+        <br>Precio: 60€ <span class="icon-picture">7</span> <span class="icon-eye"> 27  </span><span class="icon-heart"> 20</span>
+        <p>Vendo el Light Stick de Monsta X, comprado y usado solo una vez en el concierto de 2019 en Madrid. o lo cambio por la army bomb ver.3 etiquetas: kpop, k-pop, lightstick
+        "Why I love them so much?" I always asked myself about this. Whenever I watch them, support them, my love for them increases to the peak that my heart can't handle it. They are luring me in to them.
+        I asked again, "Why I love them so much?" And now my heart know why.
+        Because of the love that they showers us, armys, the never ending laughter they got us, the meaningful lyrics they send to us in their songs, the time they spend with us even with busy schedule. And most of all, the friendship they have with each other. The strongly bond of them left me in awe. :cry:
+    My friend asked me, "What if bts ends up like bb? They end being legends, they wont perform much, they wont release songs that much anymore, they'll start not to post anything."
+        I don't want that to happen :sob: without them my life is so empty. I think I'm gonna miss them once they start to get too famous.
+        Okay, stop cutting the onions now! Let's just appreciate the dork bts now, shall we? :grinning:</p>
+      </article>
+      <!--F4,Articulo 1-->
+      <article class="columna">
+        <a href="articulo.html" lang="en"><h3>Monsta X Official Light Stick Ver. 2</h3></a>
+        <a href="articulo.html"><img src="media/monstaXStick.webp" alt="imagen_articulo"></a>
+        <br>Precio: 60€ <span class="icon-picture">7</span> <span class="icon-eye"> 27  </span><span class="icon-heart"> 20</span>
+        <p>Vendo el Light Stick de Monsta X, comprado y usado solo una vez en el concierto de 2019 en Madrid. o lo cambio por la army bomb ver.3 etiquetas: kpop, k-pop, lightstick
+        "Why I love them so much?" I always asked myself about this. Whenever I watch them, support them, my love for them increases to the peak that my heart can't handle it. They are luring me in to them.
+        I asked again, "Why I love them so much?" And now my heart know why.
+        Because of the love that they showers us, armys, the never ending laughter they got us, the meaningful lyrics they send to us in their songs, the time they spend with us even with busy schedule. And most of all, the friendship they have with each other. The strongly bond of them left me in awe. :cry:
+    My friend asked me, "What if bts ends up like bb? They end being legends, they wont perform much, they wont release songs that much anymore, they'll start not to post anything."
+        I don't want that to happen :sob: without them my life is so empty. I think I'm gonna miss them once they start to get too famous.
+        Okay, stop cutting the onions now! Let's just appreciate the dork bts now, shall we? :grinning:</p>
+      </article>
+      <!--F4,Articulo 2-->
+      <article class="columna">
+        <a href="articulo.html" lang="en"><h3>Monsta X Official Light Stick Ver. 2</h3></a>
+        <a href="articulo.html"><img src="media/monstaXStick.webp" alt="imagen_articulo"></a>
+        <br>Precio: 60€ <span class="icon-picture">7</span> <span class="icon-eye"> 27  </span><span class="icon-heart"> 20</span>
+        <p>Vendo el Light Stick de Monsta X, comprado y usado solo una vez en el concierto de 2019 en Madrid. o lo cambio por la army bomb ver.3 etiquetas: kpop, k-pop, lightstick
+        "Why I love them so much?" I always asked myself about this. Whenever I watch them, support them, my love for them increases to the peak that my heart can't handle it. They are luring me in to them.
+        I asked again, "Why I love them so much?" And now my heart know why.
+        Because of the love that they showers us, armys, the never ending laughter they got us, the meaningful lyrics they send to us in their songs, the time they spend with us even with busy schedule. And most of all, the friendship they have with each other. The strongly bond of them left me in awe. :cry:
+    My friend asked me, "What if bts ends up like bb? They end being legends, they wont perform much, they wont release songs that much anymore, they'll start not to post anything."
+        I don't want that to happen :sob: without them my life is so empty. I think I'm gonna miss them once they start to get too famous.
+        Okay, stop cutting the onions now! Let's just appreciate the dork bts now, shall we? :grinning:</p>
+      </article>
+      <!--F4,Articulo 3-->
+      <article class="columna">
+        <a href="articulo.html" lang="en"><h3>Monsta X Official Light Stick Ver. 2</h3></a>
+        <a href="articulo.html"><img src="media/monstaXStick.webp" alt="imagen_articulo"></a>
+        <br>Precio: 60€ <span class="icon-picture">7</span> <span class="icon-eye"> 27  </span><span class="icon-heart"> 20</span>
+        <p>Vendo el Light Stick de Monsta X, comprado y usado solo una vez en el concierto de 2019 en Madrid. o lo cambio por la army bomb ver.3 etiquetas: kpop, k-pop, lightstick
+        "Why I love them so much?" I always asked myself about this. Whenever I watch them, support them, my love for them increases to the peak that my heart can't handle it. They are luring me in to them.
+        I asked again, "Why I love them so much?" And now my heart know why.
+        Because of the love that they showers us, armys, the never ending laughter they got us, the meaningful lyrics they send to us in their songs, the time they spend with us even with busy schedule. And most of all, the friendship they have with each other. The strongly bond of them left me in awe. :cry:
+    My friend asked me, "What if bts ends up like bb? They end being legends, they wont perform much, they wont release songs that much anymore, they'll start not to post anything."
+        I don't want that to happen :sob: without them my life is so empty. I think I'm gonna miss them once they start to get too famous.
+        Okay, stop cutting the onions now! Let's just appreciate the dork bts now, shall we? :grinning:</p>
+      </article>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy; Ingeniería Multimedia <time datetime="2020-02">2020</time> <a href="acerca.html"><strong>Sobre nosotros</strong></a></p>
+      <a href="#"><strong>Volver arriba</strong></a>
+    </footer>
+ </body>
+</html>
