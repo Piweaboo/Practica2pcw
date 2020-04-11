@@ -1,8 +1,34 @@
 var pagActual = '';
 
+//Mensaje emergente (mensajes modales) al hacer login
+function mensajeModal(html){//El contenido que recibes sy que mostrarás en el mensaje modal
+  //Primero una capa semitransparente para bloquear todo lo que no sea la capa del mensaje, con css le ponemos color y demás
+  let we = document.createElement('div');
+  //div.id = 'capa-fondo';
+  we.setAttribute('id','capa-fondo');
+  we.innerHTML = html;//La variable recibida por parámetro
+
+  //document.body.appendChild(we);
+  document.querySelector('body').appendChild(we);
+}
+//En funcion del valor que recibes, te envia a index, refresca o tal
+/* Valor
+0: refrescar
+1: lleva a index
+*/
+function cerrarMensajeModal(valor){
+  document.querySelector('#capa-fondo').remove();
+  if(valor == 0){
+    window.location.reload();
+  }else if(valor == 1){
+    window.location.href="index.html"
+  }
+}
+
 //Borra sessionStorage y te lleva a Index, ez gg
 function hacerLogout(){
   sessionStorage.removeItem('usuario');
+  window.location.href="index.html"
 }
 //Metodo para saber la pagina en la que estas actualmente
 function paginaActual(){
@@ -47,10 +73,10 @@ function MenuLogin(){
       html+='<li><a href="index.html"><span class="icon-home"></span><span class="textop">Página principal</span></a></li>';
     }
     if(pagActual!="nuevo.html"){
-      html+='      <li><a href="nuevo.html"><span class="icon-doc-add"></span><span class="textop">Nuevo artículo</span></a></li>';
+      html+='<li><a href="nuevo.html"><span class="icon-doc-add"></span><span class="textop">Nuevo artículo</span></a></li>';
     }
-    html+='<li><a onclick="hacerLogout();" href="index.html"><span class="icon-logout"></span><span class="textop">';
-    html+='Logout ('+sessionStorage['usuario']+")";
+    html+='<li><a onclick="hacerLogout();"><span class="icon-logout"></span><span class="textop">';
+    html+='Logout ('+JSON.parse(sessionStorage['usuario']).login+")";
     html+='</span></a></li>';
 
     if(pagActual!="buscar.html"){
@@ -109,38 +135,81 @@ function comprobarAcceso(){
     }
   }
 }
+//FUNCAAAAAAAA
+function mostrarArticulos(pagina){
+  //let xhr = new XMLHttpRequest(),
+  let url = 'api/articulos?pag={pagina}&lpag={6}';
 
-function mostrarArticulos(){
-  let xhr = new XMLHttpRequest(),
-      url = 'api/articulos';
-
-  xhr.open('GET', url, true);
-
-
-  /*fetch(url).then(function(respuesta){
-    console.log(respuesta);
+  fetch(url).then(function(respuesta){
     if(respuesta.ok){
-
+      respuesta.json().then(function(datos){
+        console.log(datos);
+        if(datos.RESULTADO == 'OK'){
+          let html = '';
+          datos.FILAS.forEach(function(e){
+            /*console.log(e);
+            console.log(e.nombre);*/
+            html+='<article class="columna">';
+            html+=`<a href="articulo.html?${e.id}" lang="en"><h3>${e.nombre}</h3></a>`;
+            html+=`<a href="articulo.html?${e.id}"><img src="fotos/articulos/${e.imagen}" alt="imagen_articulo"></a>`;
+            html+=`<br>Precio: ${e.precio}€ <span class="icon-picture">${e.nfotos}</span> <span class="icon-eye">${e.veces_visto}</span><span class="icon-heart">${e.nsiguiendo}</span>`;
+            html+=`<p>${e.descripcion}</p>`;
+            html+='</article>';
+          });
+          document.querySelector('#articulos').innerHTML = html;
+        }else{
+          console.log('ERROR: '+ datos.DESCRIPCION);
+        }
+      });
     }else{
       console.log("Error en la peticion fetch");
     }
-  });*/
+  });
+
+  /*xhr.open('GET', url, true);
+  xhr.onload=function(){
+    console.log(xhr.responseText);
+    let r = JSON.parse(xhr.responseText);
+    console.log(r);
+  };
+  xhr.send();*/
 }
 
+//YA FUNCAAAAAAAA
+//Bueno esto es para hacer el login
 function hacerLogin(frm){
   let url = 'api/usuarios/login',
   fd = new FormData(frm);
-  //console.log("frm: "+frm);
+
   fetch(url,{method:'POST',body:fd}).then(function(respuesta){
     if (respuesta.ok) {
       respuesta.json().then(function(datos){
         console.log(datos);
         console.log(JSON.stringify(datos));
         sessionStorage['usuario'] = JSON.stringify(datos);
+
+        let html = '';
+        html += '<article>';
+        html += '<h2>Sesión iniciada correctamente</h2>';
+        //html += '<p>La operación de login se ha realizado correctamente';
+        html += '<p>Los datos introducidos son correctos';
+        html += '<footer><button onclick = "cerrarMensajeModal(1);">Acceder</button>';
+        html += '</article>';
+        mensajeModal(html);
       });
     }else {
+      //Respuesta incorrecta
       console.log('Error en la peticion fetch');
+      let html = '';
+      html += '<article>';
+      html += '<h2>Error en el inicio de sesión</h2>';
+      //html += '<p>La operación de login se ha realizado correctamente';
+      html += '<p>Ha ocurrido un error al iniciar sesión. Por favor, vuelva a intentarlo';
+      html += '<footer><button onclick = "cerrarMensajeModal(0);">Aceptar</button>';
+      html += '</article>';
+      mensajeModal(html);
     }
   });
+
   return false;
 }

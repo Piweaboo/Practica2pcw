@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="media/fontello/css/fontello.css">
     <script type="text/javascript" src="script.js"></script>
   </head>
-  <body>
+  <body onload="MenuLogin(); comprobarAcceso();">
     <!--Aqui va la imágen y titulo de la página, común a todos-->
     <header>
       <a href="index.html"><img src="media/melones_vender.png" alt="nombre de la web"  height="150" width="150" ></a>
@@ -25,22 +25,17 @@
       <ul id="navegacion">
       </ul>
     </nav>
-    <!--Comprobar que hay usuario logueado-->
-    <script>
-      MenuLogin();
-      comprobarAcceso();
-    </script>
 
     <h2>Login</h2>
-    <form onsubmit="return hacerLogin(this)">
+    <form onsubmit="return hacerLogin(this);">
 
   		<label for="NUser">Nombre de usuario</label><br>
-    	<input type="text" name="IdUser" id="NUser" placeholder="Introduce nombre de usuario" autofocus required>
+    	<input type="text" name="login" id="NUser" placeholder="Introduce nombre de usuario" autofocus required>
       <br><br>
     	<label for="Upass">Contraseña</label><br>
-    	<input type="password" name="Pas" id="Upass" placeholder="Introduce contraseña" required>
+    	<input type="password" name="pwd" id="Upass" placeholder="Introduce contraseña" required>
       <br><br>
-  		<input type="submit" name="cosa" value="Enviar">
+  		<input type="submit" value="Enviar">
       <input type="reset" value="Limpiar">
 
     </form>
