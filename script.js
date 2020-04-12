@@ -1,4 +1,33 @@
 var pagActual = '';
+var valorIndex = '';
+var numIndex = '';
+var valorPags = '';
+var numPags = '';
+var contra1 = '';
+var contra2 = '';
+var totalArticulos = 0;
+
+var permiteRegistro = true;
+var usuarioDisponible = false;
+
+//Cuenta todos los Articulos
+function contadorArticulo(){
+  let xhr = new XMLHttpRequest();
+  let url = 'api/articulos';
+      totalArticulos = 0;
+
+  xhr.open('GET', url, true);
+  xhr.onload=function(){
+    //console.log(xhr.responseText);
+    let r = JSON.parse(xhr.responseText);
+    console.log(r);
+    if(r.RESULTADO == 'OK'){
+      totalArticulos = r.FILAS.length;
+      console.log("Articulos: "+ totalArticulos);
+    }
+  };
+  xhr.send();
+}
 
 //Mensaje emergente (mensajes modales) al hacer login
 function mensajeModal(html){//El contenido que recibes sy que mostrarás en el mensaje modal
@@ -11,6 +40,7 @@ function mensajeModal(html){//El contenido que recibes sy que mostrarás en el m
   //document.body.appendChild(we);
   document.querySelector('body').appendChild(we);
 }
+
 //En funcion del valor que recibes, te envia a index, refresca o tal
 /* Valor
 0: refrescar
@@ -30,6 +60,7 @@ function hacerLogout(){
   sessionStorage.removeItem('usuario');
   window.location.href="index.html"
 }
+
 //Metodo para saber la pagina en la que estas actualmente
 function paginaActual(){
   let url = document.URL
@@ -61,6 +92,7 @@ function paginaActual(){
     }
   }
 }
+
 //Esta funcion comprueba si hay algun usuario logueado y muestra el avegador en funcion de ello
 function MenuLogin(){
   paginaActual();
@@ -121,6 +153,7 @@ function MenuLogin(){
 
   }
 }
+
 //Aqui comprobamos que no puedas acceder a determinadas paginas
 function comprobarAcceso(){
   //Primero sabemos en que página estamos
@@ -135,10 +168,13 @@ function comprobarAcceso(){
     }
   }
 }
+
 //FUNCAAAAAAAA
 function mostrarArticulos(pagina){
   //let xhr = new XMLHttpRequest(),
-  let url = 'api/articulos?pag={pagina}&lpag={6}';
+  let url = 'api/articulos?pag='+pagina+'&lpag=6';
+  valorIndex = pagina;
+  numIndex = pagina+1;
 
   fetch(url).then(function(respuesta){
     if(respuesta.ok){
@@ -212,4 +248,143 @@ function hacerLogin(frm){
   });
 
   return false;
+}
+
+//Mira ya no sé que estoy haciendo
+function limpiarMensaje(id){
+  let html = '';
+  document.querySelector('#'+id+'').innerHTML = html;
+}
+
+//Método que comprueba si el nombre de usuario esta disponible
+function comprobarNomUsu(nom){
+  let xhr = new XMLHttpRequest(),
+      url = 'api/usuarios/'+nom;
+
+
+  xhr.open('GET', url , true);
+
+  xhr.onload = function(){
+    let r = JSON.parse(xhr.responseText);
+    console.log(r);
+    console.log(r.DISPONIBLE);
+    usuarioDisponible = r.DISPONIBLE
+    //console.log("usuarioDisponible: "+usuarioDisponible);
+  };
+  xhr.send();
+
+  console.log(nom);
+  if(usuarioDisponible == true){
+    permiteRegistro = true;
+  }
+  else{
+    permiteRegistro = false;
+    let html = '';
+    html+='<p>El nombre de usuario no está disponible.</p>';
+    document.querySelector('#login-incorrecto').innerHTML = html;
+  }
+}
+
+//comprobamos que ambas contraseñas coinciden
+function coincideContra(){
+  console.log("contra1: "+contra1);
+  console.log("contra2: "+contra2);
+  if(contra1 != '' && contra2 != ''){
+    console.log("valor: "+contra1.localeCompare(contra2));
+    if(contra1.localeCompare(contra2) != 0){//incorrecto
+        permiteRegistro = false;
+        let html = '';
+        html+='<p>Las contraseñas introducidas no coinciden.</p>';
+        document.querySelector('#contraseñas-incorrectas').innerHTML = html;
+    }else{
+      permiteRegistro = true;
+    }
+  }
+}
+
+//Hace falta que diga lo que hace??
+function hacerRegistro(frm){
+  let fd = new FormData(frm),
+  url = 'api/usuarios/registro';
+
+  console.log(permiteRegistro);
+  if(permiteRegistro == true){
+    fetch(url,{method:'POST',body:fd}).then(function(respuesta){
+      if(respuesta.ok){
+        respuesta.json().then(function(datos){
+          console.log(datos);
+        });
+      }
+    });
+
+  }else{//permiteRegistro == false
+    let html = '';
+    html += '<article>';
+    html += '<h2>Error en el registro</h2>';
+    //html += '<p>La operación de login se ha realizado correctamente';
+    html += '<p>Los datos introducidos no son correctos para efectuar el registro.Por favor, vuelva a intentarlo.</p>';
+    html += '<footer><button onclick = "cerrarMensajeModal(0);">Aceptar</button>';
+    html += '</article>';
+    mensajeModal(html);
+  }
+  return false;
+}
+
+//Para cambiar de página en el index, y mostrar otros articulos
+function cambiarPagina(caso){
+  /* casos
+  0: Ir a la primera página
+  1: Retroceder una página
+  2: Avanzar una página
+  3: Ir a la última página
+  */
+  //Comprobamos que puedas cambiar de página
+  switch(caso){
+    case 0:
+      if(valorIndex>0){
+        mostrarArticulos(0);
+        numIndex = 1;
+        hacerBotonera();
+      }
+      break;
+
+    case 1:
+    if(valorIndex>0){
+      mostrarArticulos(valorIndex-1);
+      hacerBotonera();
+    }
+      break;
+
+    case 2:
+      if(valorIndex<valorPags){
+        mostrarArticulos(valorIndex+1);
+        hacerBotonera();
+      }
+      break;
+
+    case 3:
+    if(valorIndex<valorPags){
+      mostrarArticulos(valorPags);
+      numIndex = numPags;
+      hacerBotonera();
+    }
+      break;
+  }
+}
+
+//Hace la botonera del index, que sorpresa jaja
+function hacerBotonera(){
+
+  console.log("total: " + totalArticulos);
+  numPags = Math.ceil(totalArticulos/6);
+  console.log("numPags: "+ numPags);
+  valorPags = numPags-1;
+
+  let html = '';
+  html+='<button onclick="cambiarPagina(0);">Primera página</button>';
+  html+='<button onclick="cambiarPagina(1);">Anterior</button>';
+  html+=numIndex+'/'+numPags;
+  html+='<button onclick="cambiarPagina(2);">Siguiente</button>';
+  html+='<button onclick="cambiarPagina(3);">Última página</button>';
+  document.querySelector('#botonera').innerHTML = html;
 }

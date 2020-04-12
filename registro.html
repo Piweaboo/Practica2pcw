@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="media/fontello/css/fontello.css">
     <script type="text/javascript" src="script.js"></script>
   </head>
-  <body>
+  <body onload="MenuLogin(); comprobarAcceso();">
     <!--Aqui va la imágen y titulo de la página, común a todos-->
     <header>
       <a href="index.html"><img src="media/melones_vender.png" alt="nombre de la web"  height="150" width="150" ></a>
@@ -25,35 +25,33 @@
       <ul id="navegacion">
       </ul>
     </nav>
-    <!--Comprobar que hay usuario logueado-->
-    <script>MenuLogin();</script>
-    <script>comprobarAcceso();</script>
 
     <h2>Registro de nuevo usuario</h2>
-    <form>
+    <form onsubmit="return hacerRegistro(this);">
         <br>
+        <div id="login-incorrecto"></div>
         <label for="Nusuario" id="Regform">Nombre usuario</label>
-        <input type="text" id="Nusuario" pattern="^[a-zA-Z][a-zA-Z0-9]{3,19}$" placeholder="Introduce nombre de usuario" autofocus required><br>
+        <input name="login" onfocusout="comprobarNomUsu(this.value);" onfocus="limpiarMensaje('login-incorrecto');" type="text" id="Nusuario" pattern="^[a-zA-Z][a-zA-Z0-9]{3,19}$" placeholder="Introduce nombre de usuario" autofocus required><br>
 
         <br>
 
         <label for="pas1">Contraseña</label>
-        <input type="password" id="pas1" pattern="[A-Za-z0-9_-]{6,20}$" placeholder="Introduce una contraseña" required><br>
-
+        <input name="pwd" type="password" onfocusout="contra1 = this.value; coincideContra();" onfocus="limpiarMensaje('contraseñas-incorrectas');" id="pas1" pattern="[A-Za-z0-9_-]{6,20}$" placeholder="Introduce una contraseña" required><br>
+        <div id="contraseñas-incorrectas"></div>
         <br>
 
         <label for="pas2">Confirmar contraseña</label>
-        <input type="password" id="pas2" placeholder="Confirma la contraseña" ><br>
+        <input name="pwd2" type="password" onfocusout="contra2 = this.value; coincideContra();" id="pas2" placeholder="Confirma la contraseña" ><br>
 
         <br>
 
         <label for="NCompleto">Nombre completo</label>
-        <input type="text" id="NCompleto" placeholder="Introduce el nombre completo" required><br>
+        <input name="nombre" type="text" id="NCompleto" placeholder="Introduce el nombre completo" required><br>
 
         <br>
 
         <label for="email">Email</label>
-        <input type="email" id="email" placeholder="Introduce email" required><br>
+        <input name="email" type="email" id="email" placeholder="Introduce email" required><br>
 
         <br>
 
@@ -62,9 +60,9 @@
         <img src="media/default.png" alt="foto de perfil" height="150" width="150"><br>
         <label id="botoneable" for="fotop">Subir foto</label>
         <br>
-        <input type="file" name="Fop" id="fotop" accept="image/*"><br>
+        <input name="foto" type="file" id="fotop" accept="image/*"><br>
 
-        <input type="submit" name="cosa">
+        <input type="submit" name="Enviar">
     </form>
 
     <footer>

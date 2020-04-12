@@ -8,7 +8,7 @@
     <script type="text/javascript" src="script.js"></script>
   </head>
   <!--Comprobar que hay usuario logueado-->
-  <body onload="mostrarArticulos(0);MenuLogin();">
+  <body onload="MenuLogin(); hacerBotonera();">
     <!--Aqui va la imágen y titulo de la página, común a todos-->
     <header>
       <a href="index.html"><img src="media/melones_vender.png" alt="nombre de la web" height="150" width="150"></a>
@@ -17,6 +17,9 @@
         <p>Por última vez, no vendemos melones</p>
       </div>
     </header>
+    <script>
+      contadorArticulo();
+    </script>
     <!--Ahora la barra de navegación-->
     <nav>
       <!--De momento los pongo como enlaces a pelo, luego les metemos iconos o algo-->
@@ -24,38 +27,25 @@
       <input type="checkbox" id="ckbmenu">
       <!--ul=unordered list. Lo que va aqui dentro aparecerá como una lista-->
       <ul id="navegacion">
-        <!--li para definir cada elemento de la lista-->
-        <!--<li><a href="index.html"><span class="icon-home"></span><span class="textop">Página principal</span></a></li>
-        <li><a href="buscar.html"><span class="icon-search"></span><span class="textop">Buscar</span></a></li>
-        <li><a href="nuevo.html"><span class="icon-doc-add"></span><span class="textop">Nuevo artículo</span></a></li>
-        <li><a href="index.html"><span class="icon-logout"></span><span class="textop">Logout</span></a></li>
-        <li><a href="login.html"><span class="icon-login"></span><span class="textop">Login</span></a></li>
-        <li><a href="registro.html"><span class="icon-user-plus"></span><span class="textop">Registro</span></a></li>
-        <form action="/buscar.html">
-        <input type="text" placeholder="Busqueda rápida">
-      </form></li>-->
       </ul>
     </nav>
     <br>
-    <!--<form action="/buscar.html">
-      <input type="text"></p>
-    </form>-->
 
     <section class="Tabla">
       <br>
       <h2>Últimos artículos</h2>
       <div id="articulos">
-        
+
       </div>
     </section>
 
+    <script>
+       mostrarArticulos(0);
+    </script>
+
     <!--el menú para navegar por los artículos(nos será util más adelante)-->
-    <div class="pagina">
-  		<button class="primerboton">Primera p&aacute;gina</button>
-  		<button>Anterior</button>
-  		1/3
-  		<button>Siguiente</button>
-  		<button>&Uacute;ltima p&aacute;gina</button>
+    <div id="botonera">
+
   	</div>
     <!--el pie de Página-->
     <footer>
