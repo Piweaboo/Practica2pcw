@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="media/fontello/css/fontello.css">
     <script type="text/javascript" src="script.js"></script>
   </head>
-  <body onload="MenuLogin(); comprobarAcceso();getCategorias();">
+  <body onload="MenuLogin(); comprobarAcceso();getCategorias();subirOtraFotografia();">
     <!--Aqui va la imágen y titulo de la página, común a todos-->
     <header>
       <a href="index.html"><img src="media/melones_vender.png" alt="nombre de la web"  height="150" width="150" ></a>
@@ -51,14 +51,9 @@
         </datalist>
 
         <h3>Fotos del artículo</h3>
-
-        <img src="media/default2.png" id="Fotos" alt="foto del artículo" height="150" width="200"><br>
-        <input type="button" name="bFotoS" value="Seleccionar foto" >
-        <input type="button" name="bFotoE" value="Eliminar foto" >
-        <label id="botoneable" for="fotaka">Cargar Foto</label>
-        <br>
-        <input type="file" onchange="compruebaTamaño();" name="Fotito" id="fotaka" accept="image/*"><br>
-
+        <div id="fotosArticulo">
+          
+        </div>
         <input type="submit" name="cosa">
     </form>
 

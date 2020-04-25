@@ -6,6 +6,7 @@ var numPags = '';
 var contra1 = '';
 var contra2 = '';
 var totalArticulos = 0;
+var numfoto = 0;
 
 var permiteRegistro = true;
 var usuarioDisponible = false;
@@ -91,8 +92,8 @@ function dosDecimales(valor){
 }
 
 //comprueba el tamaño de la foto
-function compruebaTamaño(){
-  let file = document.getElementById('fotaka');
+function compruebaTamaño(id){
+  let file = document.getElementById('cargarFoto'+id);
   if(file.files.length > 0){
     for(let i = 0; i < file.files.length ;i++){
       fsize = file.files.item(i).size;
@@ -105,7 +106,6 @@ function compruebaTamaño(){
         let html= '';
         html += '<article>';
         html += '<h2>Error al eleccionar archivo</h2>';
-        //html += '<p>La operación de login se ha realizado correctamente';
         html += '<p>La imagen seleccionada pesa demasiado. Por favor, seleccione otra';
         html += '<footer><button onclick = "cerrarMensajeModal(-1);">Acceder</button>';
         html += '</article>';
@@ -115,6 +115,49 @@ function compruebaTamaño(){
       }
     }
   }
+}
+
+//Carga la imagen en pantalla
+function previewImagen(input,id){
+  if(imagenAceptada == true){
+    var reader = new FileReader();
+
+    reader.onload = function(e){
+      document.getElementById('foto'+id).src =  e.target.result;
+    }
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+//Elimina la foto, resetea a un valor estandar
+function resetFoto(id){
+  document.getElementById('foto'+id).src = "media/default2.png";
+  imagenAceptada = false;
+}
+
+//Para subir una segunda fotografía
+function subirOtraFotografia(){
+  let html = '';
+  /*
+  <img src="media/default2.png" id="Fotos" alt="foto del artículo" height="150" width="200"><br>
+  <input type="button" name="bFotoS" onclick="subirOtraFotografia();" value="Añadir foto" >
+  <input type="button" onclick="resetFoto();" name="bFotoE" value="Eliminar foto" >
+  <label id="botoneable" for="fotaka">Cargar Foto</label>
+  <br>
+  <input type="file" onchange="compruebaTamaño(); previewImagen(this);" name="Fotito" id="fotaka" accept="image/*"><br>
+  */
+  let idfotos = "foto"+numfoto;
+  console.log(idfotos);
+  html+='<img src="media/default2.png" id="foto'+numfoto+'" alt="foto del artículo" height="150" width="200"><br>';
+  html+='<input type="button" name="NuevaFoto'+numfoto+'" onclick="subirOtraFotografia();" value="Añadir foto" >';
+  html+='<input type="button" onclick="resetFoto('+numfoto+');" name="QuitarFoto'+numfoto+'" value="Eliminar foto" >';
+  html+='<label id="botoneable" for="cargarFoto'+numfoto+'">Cargar Foto</label><br>';
+  html+='<input type="file" onchange="compruebaTamaño('+numfoto+'); previewImagen(this,'+numfoto+');" name="fichero" id="cargarFoto'+numfoto+'" accept="image/*"><br>';
+  document.querySelector('#fotosArticulo').innerHTML = document.querySelector('#fotosArticulo').innerHTML + html;
+  let idInput = "cargarFoto"+numfoto;
+  console.log(idInput);
+  document.getElementById(idInput).setAttribute("style","display: none;");
+  numfoto++;
 }
 
 //Obvio, aqui se llama cuando se sube un articulo
