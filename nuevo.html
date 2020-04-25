@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="media/fontello/css/fontello.css">
     <script type="text/javascript" src="script.js"></script>
   </head>
-  <body onload="MenuLogin(); comprobarAcceso();">
+  <body onload="MenuLogin(); comprobarAcceso();getCategorias();">
     <!--Aqui va la imágen y titulo de la página, común a todos-->
     <header>
       <a href="index.html"><img src="media/melones_vender.png" alt="nombre de la web"  height="150" width="150" ></a>
@@ -25,34 +25,29 @@
       <ul id="navegacion">
       </ul>
     </nav>
-    <form >
-        <h2>Nuevo artículo</h2>
-
+    <h2>Nuevo artículo</h2>
+    <form onsubmit="return subirArticulo(this);">
         <br>
 
         <label for="NArticle">Nombre del artículo</label><br>
-        <input type="text" name="IdArt" id="NArticle" maxlength="100" placeholder="Introduce nombre del artículo" autofocus required><br>
+        <input type="text" name="nombre" id="NArticle" maxlength="100" placeholder="Introduce nombre del artículo" autofocus required><br>
 
         <br>
 
         <label for="Description">Descripcion del artículo</label><br>
-        <textarea name="IdDes" id="Description" placeholder="Introduce descripción del artículo" maxlength="300" required></textarea><br>
+        <textarea name="descripción" id="Description" placeholder="Introduce descripción del artículo" maxlength="300" required></textarea><br>
 
         <br>
 
         <label for="Price">Precio del artículo</label><br>
-        <input type="number" name="Precio" id="Price" min="0" step="0.01" placeholder="Introduce precio del artículo" required><br>
+        <input type="number" onchange="dosDecimales(this.value);" name="precio" id="Price" min="0" step="0.50" value="0.00" placeholder="Introduce precio del artículo" required><br>
 
         <br>
 
         <label for="Category">Categoría del artículo</label><br>
-        <input type="text" name="Cat" id="Category" maxlength="100" list="categories" placeholder="Introduce categoría del artículo" required><br><br>
+        <input type="text" name="categoria" id="Category" maxlength="100" list="categories" placeholder="Introduce categoría del artículo" required><br><br>
         <datalist id="categories">
-            <option value="Kpop">
-            <option value="Furros">
-            <option value="Melones">
-            <option value="Tengo sueño">
-            <option value="UWU X3">
+
         </datalist>
 
         <h3>Fotos del artículo</h3>
@@ -62,7 +57,7 @@
         <input type="button" name="bFotoE" value="Eliminar foto" >
         <label id="botoneable" for="fotaka">Cargar Foto</label>
         <br>
-        <input type="file" name="Fotito" id="fotaka" accept="image/*"><br>
+        <input type="file" onchange="compruebaTamaño();" name="Fotito" id="fotaka" accept="image/*"><br>
 
         <input type="submit" name="cosa">
     </form>

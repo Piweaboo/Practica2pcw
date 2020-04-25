@@ -9,6 +9,7 @@ var totalArticulos = 0;
 
 var permiteRegistro = true;
 var usuarioDisponible = false;
+var imagenAceptada = false;
 
 //Cuenta todos los Articulos
 function contadorArticulo(){
@@ -51,14 +52,96 @@ function cerrarMensajeModal(valor){
   if(valor == 0){
     window.location.reload();
   }else if(valor == 1){
-    window.location.href="index.html"
+    window.location.href="index.html";
+  }else if (valor == 2) {
+    window.location.href="login.html";
   }
+}
+
+//Aqui pillamos las categorias y las metemos en el datalist a la hora de subir un nuevo articulos
+function getCategorias(){
+  //document.querySelector('#categories').innerHTML = html;
+  let url = 'api/categorias';
+
+  fetch(url).then(function(respuesta){
+    if(respuesta.ok){
+      respuesta.json().then(function(datos){
+        console.log(datos);
+        if(datos.RESULTADO == 'OK'){
+          let html = '';
+          datos.FILAS.forEach(function(e){
+            //console.log(e.nombre);
+            html+=`<option value="${e.nombre}">`;
+          });
+          document.querySelector('#categories').innerHTML = html;
+        }else{
+          console.log('ERROR: '+ datos.DESCRIPCION);
+        }
+      });
+    }else{
+      console.log("Error en la peticion fetch");
+    }
+  });
+}
+
+//Para el precio del nuevo articulo, que tenga 2 dosDecimales
+function dosDecimales(valor){
+  valor = parseFloat(valor).toFixed(2);
+  document.querySelector('#Price').value = valor;
+}
+
+//comprueba el tamaño de la foto
+function compruebaTamaño(){
+  let file = document.getElementById('fotaka');
+  if(file.files.length > 0){
+    for(let i = 0; i < file.files.length ;i++){
+      fsize = file.files.item(i).size;
+      console.log(fsize);
+      size = fsize/1024;
+      size = size.toFixed(2);
+      console.log(size);
+      if(size>300){
+        imagenAceptada = false;
+        let html= '';
+        html += '<article>';
+        html += '<h2>Error al eleccionar archivo</h2>';
+        //html += '<p>La operación de login se ha realizado correctamente';
+        html += '<p>La imagen seleccionada pesa demasiado. Por favor, seleccione otra';
+        html += '<footer><button onclick = "cerrarMensajeModal(-1);">Acceder</button>';
+        html += '</article>';
+        mensajeModal(html);
+      }else{
+        imagenAceptada = true;
+      }
+    }
+  }
+}
+
+//Obvio, aqui se llama cuando se sube un articulo
+function subirArticulo(frm){
+
+  return false;
 }
 
 //Borra sessionStorage y te lleva a Index, ez gg
 function hacerLogout(){
-  sessionStorage.removeItem('usuario');
-  window.location.href="index.html"
+  let xhr = new XMLHttpRequest(),
+  url = 'api/usuarios/logout',
+  sesion = JSON.parse(sessionStorage['usuario']),
+  autorizacion = sesion.login+':'+sesion.token;
+  console.log(JSON.parse(sessionStorage['usuario']));
+
+  xhr.open('POST',url,true);
+  xhr.onload = function(){
+    let r = JSON.parse(xhr.responseText);
+    console.log(r.RESULTADO);
+    if(r.RESULTADO == 'OK'){
+      sessionStorage.removeItem('usuario');
+      window.location.href="index.html";
+    }
+  };
+  xhr.setRequestHeader('Authorization',autorizacion);
+  xhr.send();
 }
 
 //Metodo para saber la pagina en la que estas actualmente
@@ -89,6 +172,9 @@ function paginaActual(){
     }else if(trozos[i] == "registro.html"){
       pagActual = trozos[i];
       break;
+    }else{
+      pagActual = "index.html";
+      break;
     }
   }
 }
@@ -97,9 +183,9 @@ function paginaActual(){
 function MenuLogin(){
   paginaActual();
   if(sessionStorage['usuario']){
-    console.log("Hay usuario registrado");
+    //console.log("Hay usuario registrado");
     console.log("Esta en la página " + pagActual);
-    console.log("El usuario es "+sessionStorage['usuario']);
+    //console.log("El usuario es "+sessionStorage['usuario']);
     let html = '';
     if(pagActual!="index.html"){
       html+='<li><a href="index.html"><span class="icon-home"></span><span class="textop">Página principal</span></a></li>';
@@ -312,7 +398,17 @@ function hacerRegistro(frm){
     fetch(url,{method:'POST',body:fd}).then(function(respuesta){
       if(respuesta.ok){
         respuesta.json().then(function(datos){
+          console.log("Registro: ");
           console.log(datos);
+          document.getElementById("formRegistro").reset();
+          let html = '';
+          html += '<article>';
+          html += '<h2>Registro correcto</h2>';
+          //html += '<p>La operación de login se ha realizado correctamente';
+          html += '<p>Los datos introducidos son correctos y el registro se ha efectuado correctamente.</p>';
+          html += '<footer><button onclick = "cerrarMensajeModal(2);">Aceptar</button>';
+          html += '</article>';
+          mensajeModal(html);
         });
       }
     });
