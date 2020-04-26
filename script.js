@@ -137,6 +137,7 @@ function resetFoto(id){
 
 //Para subir una segunda fotografía
 function subirOtraFotografia(){
+  imagenAceptada = false;
   let html = '';
   /*
   <img src="media/default2.png" id="Fotos" alt="foto del artículo" height="150" width="200"><br>
@@ -146,23 +147,87 @@ function subirOtraFotografia(){
   <br>
   <input type="file" onchange="compruebaTamaño(); previewImagen(this);" name="Fotito" id="fotaka" accept="image/*"><br>
   */
+  numfoto++;
   let idfotos = "foto"+numfoto;
   console.log(idfotos);
   html+='<img src="media/default2.png" id="foto'+numfoto+'" alt="foto del artículo" height="150" width="200"><br>';
   html+='<input type="button" name="NuevaFoto'+numfoto+'" onclick="subirOtraFotografia();" value="Añadir foto" >';
   html+='<input type="button" onclick="resetFoto('+numfoto+');" name="QuitarFoto'+numfoto+'" value="Eliminar foto" >';
   html+='<label id="botoneable" for="cargarFoto'+numfoto+'">Cargar Foto</label><br>';
-  html+='<input type="file" onchange="compruebaTamaño('+numfoto+'); previewImagen(this,'+numfoto+');" name="fichero" id="cargarFoto'+numfoto+'" accept="image/*"><br>';
+  html+='<input type="file" onchange="compruebaTamaño('+numfoto+'); previewImagen(this,'+numfoto+');" name="hola'+numfoto+'" id="cargarFoto'+numfoto+'" accept="image/*"><br>';
   document.querySelector('#fotosArticulo').innerHTML = document.querySelector('#fotosArticulo').innerHTML + html;
   let idInput = "cargarFoto"+numfoto;
   console.log(idInput);
   document.getElementById(idInput).setAttribute("style","display: none;");
-  numfoto++;
 }
 
 //Obvio, aqui se llama cuando se sube un articulo
 function subirArticulo(frm){
+  if(imagenAceptada == true){
+    let url = 'api/articulos',
+    fd = new FormData(frm),
+    sesion = JSON.parse(sessionStorage['usuario']),
+    autorizacion = sesion.login+':'+sesion.token;
 
+    fetch(url,
+      {method:'POST',
+      body:fd,
+      headers:{'Authorization':autorizacion}}).then(function(respuesta){
+        //console.log(respuesta);
+        if(respuesta.ok){
+          respuesta.json().then(function(datos){
+            //console.log(datos.ID);
+            if(imagenAceptada == true){
+              let contadorFotos = 0;
+              let urlf = 'api/articulos/'+datos.ID+'/foto';
+              while(contadorFotos < numfoto && imagenAceptada == true){
+                let variable = contadorFotos+1;
+                /*for(var pair of fd.entries()) {
+                  console.log(pair[0]+ ', '+ pair[1]);
+                }*/
+                console.log("hola:");
+                console.log(fd.get('hola'+variable));
+                fd.set('fichero',fd.get('hola'+variable));
+                console.log("fichero");
+                console.log(fd.get('fichero'));
+                /*
+                console.log("Antes y despues");
+                console.log(document.getElementById('cargarFoto'+variable));
+                document.getElementById('cargarFoto'+variable).setAttribute("name","fichero");
+                console.log(document.getElementById('cargarFoto'+variable));*/
+                contadorFotos++;
+                fetch(urlf,
+                  {method:'POST',
+                  body:fd,
+                  headers:{'Authorization':autorizacion}}).then(function(respuesta2){
+                    console.log(respuesta2);
+                    if(respuesta2.ok){
+                      respuesta2.json().then(function(datos2){
+                        console.log("datos2");
+                        console.log(datos2);
+
+                      });
+                    }else{
+                      imagenAceptada = false;
+                    }
+                  });
+                  //fd.delete('fichero');
+              }
+              //Aqui elmensaje modal
+              let html = '';
+              html += '<article>';
+              html += '<h2>Articulo subido correctamente</h2>';
+              html += '<p>Se ha guardado el articulo correctamente';
+              html += '<footer><button onclick = "cerrarMensajeModal(1);">Acceder</button>';
+              html += '</article>';
+              mensajeModal(html);
+            }
+          });
+        }else{
+          console.log("Error en la peticion fetch");
+        }
+    });
+  }
   return false;
 }
 
@@ -190,34 +255,16 @@ function hacerLogout(){
 //Metodo para saber la pagina en la que estas actualmente
 function paginaActual(){
   let url = document.URL
-  //console.log("La URL es " + url);
+  console.log("La URL es " + url);
   let trozos = url.split("/");
   pagActual = '';
   for(var i = 0;i<trozos.length;i++){
-    if(trozos[i] == "acerca.html"){
-      pagActual = trozos[i];
-      break;
-    }else if(trozos[i] == "articulo.html"){
-      pagActual = trozos[i];
-      break;
-    }else if(trozos[i] == "buscar.html"){
-      pagActual = trozos[i];
-      break;
-    }else if(trozos[i] == "index.html"){
-      pagActual = trozos[i];
-      break;
-    }else if(trozos[i] == "login.html"){
-      pagActual = trozos[i];
-      break;
-    }else if(trozos[i] == "nuevo.html"){
-      pagActual = trozos[i];
-      break;
-    }else if(trozos[i] == "registro.html"){
+    //console.log("Trozos:"+trozos[i]);
+    if(trozos[i] == "acerca.html"||trozos[i] == "articulo.html"||trozos[i] == "buscar.html"||trozos[i] == "index.html"||trozos[i] == "login.html"||trozos[i] == "nuevo.html"||trozos[i] == "registro.html"){
       pagActual = trozos[i];
       break;
     }else{
       pagActual = "index.html";
-      break;
     }
   }
 }
