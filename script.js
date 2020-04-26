@@ -6,7 +6,9 @@ var numPags = '';
 var contra1 = '';
 var contra2 = '';
 var totalArticulos = 0;
+var fotoArticulo = 1; 
 var numfoto = 0;
+
 
 var permiteRegistro = true;
 var usuarioDisponible = false;
@@ -58,6 +60,18 @@ function cerrarMensajeModal(valor){
     window.location.href="login.html";
   }
 }
+
+function cerrarMensajeModal2(valor){
+  document.querySelector('#capa-fondo').remove();
+  if(valor == 0){
+    accesoArticulo();
+    
+  }else if(valor == 1){
+    accesoArticulo();
+    document.getElementById("texto").focus();
+  }
+}
+
 
 //Aqui pillamos las categorias y las metemos en el datalist a la hora de subir un nuevo articulos
 function getCategorias(){
@@ -116,6 +130,405 @@ function compruebaTamaño(id){
     }
   }
 }
+
+function cargarPreguntas(id_art){
+  if(sessionStorage['usuario']){
+    let xhr = new XMLHttpRequest(),
+    url = 'api/articulos/' +id_art+ '/preguntas';
+    sesion = JSON.parse(sessionStorage['usuario']),
+    autorizacion = sesion.login+':'+sesion.token;
+    xhr.open('GET',url,true);
+    xhr.onload = function(){
+      let r = JSON.parse(xhr.responseText);
+      if(r.RESULTADO == 'OK'){
+        let html = '';
+        r.FILAS.forEach(function(e){
+          console.log(e);
+          html+=`<time datetime="${e.fecha_hora}">Fecha de publicaci&oacute;n:${e.fecha_hora}</time>`
+          html+=`<p><a href="buscar.html?${e.login}"> <img src="fotos/usuarios/${e.foto_usuario}" width="40" height="40" alt="imagen_usuario"> ${e.login}</a>: ${e.pregunta}</p>`
+          
+            
+            
+          if(e.respuesta!=null){
+            html+=`<p>Respuesta: ${e.respuesta}</p>`
+          }else{
+            let esta=false;
+
+            
+            let url2='api/articulos/' +id_art;
+            fetch(url2).then(function(respuesta2){
+              if(respuesta2.ok){
+                respuesta2.json().then(function(datos2){
+                  if(datos2.RESULTADO == 'OK'){
+                      if(datos2.FILAS[0].vendedor==sesion.login){
+                        esta=true;
+                          if(esta){
+                          console.log("hola");
+                          //botonResponder(id_art);
+                          html+=`<button onclick="responderPregunta(${id_art})" type="button">Responder pregunta</button>`;
+                          }
+                      }
+          
+          
+                  }else{
+                    console.log('ERROR: '+ datos2.DESCRIPCION);
+                  }
+                  
+                });
+              }else{
+                console.log("Error en la peticion fetch");
+              }
+            }
+            ); 
+
+
+
+
+            
+          }
+
+
+        });
+        document.querySelector('#preguntas').innerHTML = html;
+        
+      }else{
+        console.log('ERROR: '+ datos.DESCRIPCION);
+      }
+    };
+    xhr.setRequestHeader('Authorization',autorizacion);
+    xhr.send();
+  }
+  else{
+    let url='api/articulos/' +id_art+ '/preguntas';
+    fetch(url).then(function(respuesta){
+      if(respuesta.ok){
+        respuesta.json().then(function(datos){
+          console.log(datos);
+          if(datos.RESULTADO == 'OK'){
+            let html = '';
+            datos.FILAS.forEach(function(e){
+              console.log(e);
+              html+=`<time datetime="${e.fecha_hora}">Fecha de publicaci&oacute;n:${e.fecha_hora}</time>`
+              html+=`<p><a href="buscar.html?${e.login}"> <img src="fotos/usuarios/${e.foto_usuario}" width="40" height="40" alt="imagen_usuario"> ${e.login}</a>: ${e.pregunta}</p>`
+              
+                
+                
+              if(e.respuesta!=null){
+                html+=`<p>Respuesta: ${e.respuesta}</p>`
+              }
+            }
+            );
+            document.querySelector('#preguntas').innerHTML = html;
+
+          }else{
+            console.log('ERROR: '+ datos.DESCRIPCION);
+          }
+        });
+      }else{
+        console.log("Error en la peticion fetch");
+      }
+    }
+    ); 
+  }
+}
+
+function botonResponder(id_art){
+  console.log(id_art);
+  
+  let html=`<button onclick="responderPregunta(${id_art})" type="button">Responder pregunta</button>`;
+  document.querySelector('#responder').innerHTML = html;
+}
+
+function responderPregunta(id_art){
+    console.log(id_art);
+}
+
+
+
+
+//Comprueba que no se intente acceder a la pagina articulo sin id 
+function accesoArticulo(){
+  let url = document.URL;
+  let trozos = url.split("?");
+  if(trozos[1]==""){
+    window.location.href = "index.html";
+  }else{
+      pedirInfoArticulo(trozos[1]);
+      cargarPreguntas(trozos[1]);
+  }
+}
+
+function pedirInfoArticulo(id_art){
+  fotoArticulo=1;
+  if(sessionStorage['usuario']){
+    let xhr = new XMLHttpRequest(),
+    url = 'api/articulos/' +id_art,
+    sesion = JSON.parse(sessionStorage['usuario']),
+    autorizacion = sesion.login+':'+sesion.token;
+
+    xhr.open('GET',url,true);
+    xhr.onload = function(){
+      let r = JSON.parse(xhr.responseText);
+      if(r.RESULTADO == 'OK'){
+        
+        let html = '';
+        r.FILAS.forEach(function(e){
+          console.log(e);
+          getFoto(e.id);
+          pasaFotos(e.id);
+          html+=`<h2>${e.nombre}</h2>`
+          html+=`<div id="fotos_art"><br></div>`
+          html+=`<div id="bot_fotos"><br></div>`
+          html+=`Precio: ${e.precio}€  Vendedor:<a href="buscar.html?${e.vendedor}"><img src="fotos/usuarios/${e.foto_vendedor}" width="40" height="40" alt="imagen_vendedor">${e.vendedor}</a>`
+          html+=`<p>${e.descripcion}</p>`
+          html+=`<span class="icon-eye">${e.veces_visto}</span> <span class="icon-heart"> ${e.nsiguiendo}</span><a href="#SeccionComent"><span class="icon-comment"> ${e.npreguntas}</a></span>`
+          ponerBoton(e.id);
+          html+=`<div id="boton"><br></div>`
+
+
+
+        });
+        document.querySelector('#articulo').innerHTML = html;
+        
+      }else{
+        console.log('ERROR: '+ datos.DESCRIPCION);
+      }
+    };
+    xhr.setRequestHeader('Authorization',autorizacion);
+    xhr.send();
+  }
+  else{
+    let url='api/articulos/' +id_art;
+    fetch(url).then(function(respuesta){
+      if(respuesta.ok){
+        respuesta.json().then(function(datos){
+          console.log(datos);
+          if(datos.RESULTADO == 'OK'){
+            let html = '';
+            datos.FILAS.forEach(function(e){
+              console.log(e);
+              getFoto(e.id);
+              pasaFotos(e.id);
+              html+=`<h2>${e.nombre}</h2>`
+              html+=`<div id="fotos_art"><br></div>`
+              html+=`<div id="bot_fotos"><br></div>`
+              html+=`Precio: ${e.precio}€  Vendedor:<a href="buscar.html?${e.vendedor}"><img src="fotos/usuarios/${e.foto_vendedor}" width="40" height="40" alt="imagen_vendedor">${e.vendedor}</a>`
+              html+=`<p>${e.descripcion}</p>`
+              html+=`<span class="icon-eye">${e.veces_visto}</span> <span class="icon-heart"> ${e.nsiguiendo}</span><a href="#SeccionComent"><span class="icon-comment"> ${e.npreguntas}</a></span>`
+              
+            }
+            );
+            document.querySelector('#articulo').innerHTML = html;
+
+          }else{
+            console.log('ERROR: '+ datos.DESCRIPCION);
+          }
+        });
+      }else{
+        console.log("Error en la peticion fetch");
+      }
+    }
+    ); 
+  }
+  
+}
+
+//Imprime los botones del carrusel cada vez que se pasa la pagina
+
+function pasaFotos(id_art){
+
+  let xhr = new XMLHttpRequest(),
+  url = 'api/articulos/' +id_art;
+
+  xhr.open('GET',url,true);
+  xhr.onload = function(){
+    let r = JSON.parse(xhr.responseText);
+    if(r.RESULTADO == 'OK'){
+      
+      let html = '';
+      r.FILAS.forEach(function(e){
+        
+        html+=`<button onclick="fotoAnterior(${e.nfotos}, ${e.id})">Anterior</button>${fotoArticulo}/${e.nfotos}<button onclick="fotoSigiente(${e.nfotos}, ${e.id})">Siguiente</button>`
+        
+        
+        
+      });
+      document.querySelector('#bot_fotos').innerHTML = html;
+    }
+  };
+  xhr.send();
+
+}
+
+//Pone el boton de seguir o no cuando el usuario esta logeado
+
+function ponerBoton(id_art){
+  let xhr = new XMLHttpRequest(),
+  url = 'api/articulos/' +id_art;
+  sesion = JSON.parse(sessionStorage['usuario']),
+  autorizacion = sesion.login+':'+sesion.token;
+  xhr.open('GET',url,true);
+  xhr.onload = function(){
+    let r = JSON.parse(xhr.responseText);
+    if(r.RESULTADO == 'OK'){
+      
+      let html = '';
+      r.FILAS.forEach(function(e){
+        if(e.estoy_siguiendo==1){
+          html+=`<button onclick="cambiarBotonFalse(${id_art})" type="button" name="seguir/no">Dejar de seguir artículo</button>`
+        }
+
+        if(e.estoy_siguiendo==0){
+          html+=`<button onclick="cambiarBotonTrue(${id_art})" type="button" name="seguir/no">Seguir este artículo</button>`
+        }
+        
+       
+      });
+      document.querySelector('#boton').innerHTML = html;
+    }
+  };
+  xhr.setRequestHeader('Authorization',autorizacion);
+  xhr.send();
+}
+
+//Cambia el boton de no siguiendo a siguiendo
+
+function cambiarBotonTrue(id_art){
+  let xhr = new XMLHttpRequest();
+  url = 'api/articulos/' +id_art+'/seguir/true';
+  sesion = JSON.parse(sessionStorage['usuario']);
+  autorizacion = sesion.login+':'+sesion.token;
+
+  xhr.open('POST',url,true);
+  xhr.onload = function(){
+    let r = JSON.parse(xhr.responseText);
+    console.log(r);
+    if(r.RESULTADO == 'OK'){
+      ponerBoton(id_art);
+    }
+  };
+  xhr.setRequestHeader('Authorization',autorizacion);
+  xhr.send();
+}
+
+//cambia el boton de Siguiendo a no siguiendo
+
+function cambiarBotonFalse(id_art){
+  let xhr = new XMLHttpRequest();
+  url = 'api/articulos/' +id_art+'/seguir/false';
+  sesion = JSON.parse(sessionStorage['usuario']);
+  autorizacion = sesion.login+':'+sesion.token;
+  console.log(JSON.parse(sessionStorage['usuario']));
+
+  xhr.open('POST',url,true);
+  xhr.onload = function(){
+    let r = JSON.parse(xhr.responseText);
+    console.log(r);
+    if(r.RESULTADO == 'OK'){
+      ponerBoton(id_art);
+    }
+  };
+  xhr.setRequestHeader('Authorization',autorizacion);
+  xhr.send();
+}
+
+//Cambia la foto a la anterior si hay 
+function fotoAnterior(num_art, id_art){
+  if(fotoArticulo>1){
+    fotoArticulo--;
+    getFoto(id_art);
+    pasaFotos(id_art);
+  }
+}
+
+//Cambia la foto a la siguente si hay 
+function fotoSigiente(num_art, id_art){
+  if(fotoArticulo<num_art){
+    fotoArticulo++;
+    getFoto(id_art);
+    pasaFotos(id_art);
+  }
+}
+
+
+//Pasa la foto que se le pide que mueste en el carrusel a la info
+function getFoto(id_art){
+  let xhr = new XMLHttpRequest(),
+  url = 'api/articulos/' +id_art+ '/fotos';
+
+  xhr.open('GET',url,true);
+  xhr.onload = function(){
+    let r = JSON.parse(xhr.responseText);
+    if(r.RESULTADO == 'OK'){
+      contador=1;
+      let html = '';
+      r.FILAS.forEach(function(e){
+        if(contador==fotoArticulo){
+          console.log(e);
+          html+=`<img src="fotos/articulos/${e.fichero}" width="300" height="300" alt="imagen ${e.id}">`
+        }
+        contador++;
+       
+      });
+      document.querySelector('#fotos_art').innerHTML = html;
+    }
+  };
+  xhr.send();
+}
+
+
+function enviarPregunta(frm){
+  let id_art="";
+  let url2 = document.URL;
+  let trozos = url2.split("?");
+  
+  id_art=trozos[1];
+  
+  
+
+
+  let url = 'api/articulos/'+ id_art+'/pregunta';
+  fd = new FormData(frm);
+  sesion = JSON.parse(sessionStorage['usuario']),
+  autorizacion = sesion.login+':'+sesion.token;
+
+  fetch(url,{method:'POST',body:fd,headers:{'Authorization':autorizacion}}).then(function(respuesta){
+    if (respuesta.ok) {
+      respuesta.json().then(function(datos){
+        console.log(datos);
+        document.getElementById("formPre"). reset();
+        let html = '';
+        html += '<article>';
+        html += '<h2>Pregunta enviada correctamente</h2>';
+        //html += '<p>La operación de login se ha realizado correctamente';
+        html += '<p>La pregunta que se ha hecho ha quedado correctamente registrada';
+        html += '<footer><button onclick = "cerrarMensajeModal2(0)";>Cerrar</button>';
+        html += '</article>';
+        
+        mensajeModal(html);
+      });
+    }else {
+      //Respuesta incorrecta
+      
+      console.log('Error en la peticion fetch');
+      let html = '';
+      html += '<article>';
+      html += '<h2>Error al enviar pregunta</h2>';
+      //html += '<p>La operación de login se ha realizado correctamente';
+      html += '<p>No se ha podido registrar correctamente la pregunta. Por favor, vuelva a intentarlo';
+      html += '<footer><button onclick = "cerrarMensajeModal2(1);">Cerrar</button>';
+      html += '</article>';
+      mensajeModal(html);
+      
+    accesoArticulo();
+    document.getElementById("texto").focus();
+    }
+  });
+
+  return false;
+}
+
+
 
 //Carga la imagen en pantalla
 function previewImagen(input,id){
@@ -348,7 +761,7 @@ function comprobarAcceso(){
 //FUNCAAAAAAAA
 function mostrarArticulos(pagina){
   //let xhr = new XMLHttpRequest(),
-  let url = 'api/articulos?pag='+pagina+'&lpag=6';
+  let url = 'api/articulos?pag='+pagina+'&lpag=2';
   valorIndex = pagina;
   numIndex = pagina+1;
 
@@ -405,7 +818,7 @@ function hacerLogin(frm){
         html += '<h2>Sesión iniciada correctamente</h2>';
         //html += '<p>La operación de login se ha realizado correctamente';
         html += '<p>Los datos introducidos son correctos';
-        html += '<footer><button onclick = "cerrarMensajeModal(1);">Acceder</button>';
+        html += '<footer><button onclick = "cerrarMensajeModal(1)" >Acceder</button>';
         html += '</article>';
         mensajeModal(html);
       });
